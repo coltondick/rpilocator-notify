@@ -1,13 +1,8 @@
-# Raspberry Pi Locator Telegram Notifier
+# Raspberry Pi Locator Notifier
 
-This script checks the [rpilocator.com](rpilocator.com) RSS feed for stock alerts for a specified country and model, and sends a notification via Telegram when a new stock alert is found.
+This script checks the [rpilocator.com](rpilocator.com) RSS feed for stock alerts for a specified country and model, and currently sends a notification via Telegram when a new stock alert is found. If you'd like to request a new notifcation service be added, please open a issue.
 
-## Prerequisites
-
-- Docker
-- A Telegram account
-
-## Required:
+## Telegram Required:
 
 1. Create a new Telegram bot using [BotFather](https://t.me/BotFather):
    - Open a chat with BotFather and send the command `/newbot`.
