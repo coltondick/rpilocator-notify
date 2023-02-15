@@ -2,7 +2,7 @@
 
 This script checks the [rpilocator.com](rpilocator.com) RSS feed for stock alerts for a specified country and model, and currently sends a notification via Telegram when a new stock alert is found. To request the addition of a new notification service, please open an issue.
 
-## Telegram Required:
+## Telegram Instructions:
 
 1. Create a new Telegram bot using [BotFather](https://t.me/BotFather):
    - Open a chat with BotFather and send the command `/newbot`.
