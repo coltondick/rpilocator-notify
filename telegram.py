@@ -1,9 +1,7 @@
 import requests
 import os
-from dotenv import load_dotenv
 
 # Load the environment variables from the .env file
-load_dotenv()
 
 
 def get_chat_id():

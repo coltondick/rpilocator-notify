@@ -6,11 +6,11 @@ import time
 import sqlite3
 import logging
 
+# Configure the logging module
+logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
+
 
 def start_monitor(telegram_chat_id):
-
-    # Configure the logging module
-    logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 
     # URL of the RSS feed
     url = "https://rpilocator.com/feed/"
