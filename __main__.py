@@ -1,7 +1,52 @@
-from dependencies import *
+"""
+This module provides the main entry point to the rpilocator application. It loads the required environment variables
+from a .env file or from the system environment, starts a monitor to check for the availability of Raspberry Pi devices
+in a specific country and model, and sends notifications to a Telegram chat using the Telegram Bot API.
+
+Functions:
+    main() -> None:
+        The main entry point to the rpilocator application. It loads the required environment variables, starts a
+        monitor to check for the availability of Raspberry Pi devices in a specific country and model, and sends
+        notifications to a Telegram chat using the Telegram Bot API.
+
+To use this module, you need to have a Telegram bot and its token, and a Telegram chat ID where the notifications will
+be sent. You can create a bot and obtain its token by talking to the BotFather on Telegram. You can obtain the chat ID
+by sending a message to your bot and retrieving the chat ID from the response using the get_chat_id() function.
+
+Example usage:
+
+    # Create a .env file with the required environment variables
+    TELEGRAM_BOT_TOKEN=my_bot_token
+    TELEGRAM_CHAT_ID=my_chat_id
+    COUNTRY_CODE=US
+    MODEL_NAME=Raspberry Pi 4
+
+    # Start the rpilocator application
+    python -m rpilocator
+
+"""
+
+
+import os
+import sys
+import logging
+from dotenv import load_dotenv
+from rpilocator.notifier import TelegramNotifier
+from rpilocator import monitor
+from rpilocator import telegram
 
 
 def main():
+    """
+    If running inside a docker environment, load the environment variables from the container, otherwise
+    load them from the .env file.
+
+    The main entry point to the rpilocator application.
+
+    This function configures the logging module, loads environment variables from a .env file or from the system
+    environment, starts a monitor to check for the availability of Raspberry Pi devices in a specific country and model,
+    and sends notifications to a Telegram chat using the Telegram BOT
+    """
     # Configure the logging module
     logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 
@@ -43,7 +88,7 @@ def main():
     # Output an error if any of the required environment variables are missing
     if missing_env_vars:
         logging.error("The following environment variables are not set: %s", ", ".join(missing_env_vars))
-        exit(1)
+        sys.exit(1)
 
     # Start the monitor
     monitor.start_monitor(notifier, country_code, model_name)
