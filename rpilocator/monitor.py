@@ -1,49 +1,13 @@
-import feedparser
-import os
-import requests
-from datetime import datetime
-import time
-import sqlite3
-import logging
-
-# Configure the logging module
-logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
+from dependencies import *
 
 
-def start_monitor(telegram_chat_id):
-
+def start_monitor(notifier, country_code, model_name):
+    """Starts monitoring an RSS feed and sends notifications to a notifier when a new entry is added."""
     # URL of the RSS feed
     url = "https://rpilocator.com/feed/"
 
-    # Detect if running inside a docker environment and load the environment variables accordingly
-    if os.path.exists("/.dockerenv"):
-        logging.info("Running inside a docker environment, loading environment variables from the container...")
-        country_code = os.environ.get("COUNTRY_CODE")
-        model_name = os.environ.get("MODEL_NAME")
-        bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    else:
-        # Load the environment variables from the .env file
-        logging.info("Running outside of a docker environment, loading environment variables from .env file...")
-        country_code = os.getenv("COUNTRY_CODE")
-        model_name = os.getenv("MODEL_NAME")
-        bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
-
     # Construct the product title to search for
     product_title = f"Stock Alert ({country_code}): {model_name}"
-
-    # Check if the required environment variables are set
-    required_env_vars = ["COUNTRY_CODE", "MODEL_NAME", "TELEGRAM_BOT_TOKEN"]
-    missing_env_vars = []
-    for env_var in required_env_vars:
-        if not os.getenv(env_var):
-            missing_env_vars.append(env_var)
-        elif not os.getenv(env_var).strip():
-            missing_env_vars.append(env_var)
-
-    # Output an error if any of the required environment variables are missing
-    if missing_env_vars:
-        logging.error("The following environment variables are not set: %s", ", ".join(missing_env_vars))
-        exit(1)
 
     # Connect to the database and create the notifications table if it doesn't exist
     conn = sqlite3.connect("notifications.db")
@@ -89,16 +53,8 @@ def start_monitor(telegram_chat_id):
                 if last_message is not None and message == last_message[0]:
                     logging.info("Duplicate notification, skipping...")
                 else:
-                    # Send the message via the Telegram bot
-                    telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-                    telegram_params = {"chat_id": telegram_chat_id, "text": message}
-                    response = requests.post(telegram_url, json=telegram_params)
-                    if response.ok:
-                        logging.info("Notification sent successfully!")
-                    else:
-                        logging.warning(
-                            f"Notification failed with status code {response.status_code}: {response.reason} - {response.text}"
-                        )
+                    # Send the message via the notifier
+                    notifier.send_notification(message)
 
                     # Insert the message and timestamp into the database
                     timestamp = int(datetime.timestamp(datetime.now()))
