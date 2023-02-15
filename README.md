@@ -1,6 +1,6 @@
 # Raspberry Pi Locator Notifier
 
-This script checks the [rpilocator.com](rpilocator.com) RSS feed for stock alerts for a specified country and model, and currently sends a notification via Telegram when a new stock alert is found. If you'd like to request a new notifcation service be added, please open a issue.
+This script checks the [rpilocator.com](rpilocator.com) RSS feed for stock alerts for a specified country and model, and currently sends a notification via Telegram when a new stock alert is found. To request the addition of a new notification service, please open an issue.
 
 ## Telegram Required:
 
