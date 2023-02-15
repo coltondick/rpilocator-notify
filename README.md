@@ -19,7 +19,6 @@ This script checks the [rpilocator.com](rpilocator.com) RSS feed for stock alert
    - `COUNTRY_CODE`: The country code to search for in the stock alerts.
    - `MODEL_NAME`: The name of the model to search for in the stock alerts.
    - `TELEGRAM_BOT_TOKEN`: The Telegram bot token for your bot (obtained in step 1).
-   - `TELEGRAM_CHAT_ID`: The chat ID for the chat with your bot (obtained in step 2).
 
 ## Build and Run:
 
